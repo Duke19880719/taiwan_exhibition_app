@@ -1,4 +1,38 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1" systemVersion="11A491" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <elements/>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="13772" systemVersion="17D47" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Detai_info" representedClassName="Detai_info" syncable="YES" codeGenerationType="class">
+        <attribute name="end_time" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="latitude" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="location" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="location_name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="longitude" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="start_time" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="main_info" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="User_favorit_exibition" inverseName="detail_info" inverseEntity="User_favorit_exibition" syncable="YES"/>
+    </entity>
+    <entity name="User_favorit_exibition" representedClassName="User_favorit_exibition" syncable="YES" codeGenerationType="class">
+        <attribute name="activity_str" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="description_str" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="discount_str" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="endTime" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="img_exhib" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="latitude" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="location" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="locationName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="longtitude" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="onSales" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="price" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="promote_source_url" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="saleornot_str" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="source_web_str" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="time" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="time_str" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="title_temp" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="unit" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="websale_str" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="detail_info" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Detai_info" inverseName="main_info" inverseEntity="Detai_info" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Detai_info" positionX="-63" positionY="126" width="128" height="148"/>
+        <element name="User_favorit_exibition" positionX="-405" positionY="-99" width="128" height="343"/>
+    </elements>
 </model>

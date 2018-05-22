@@ -1,7 +1,4 @@
 //
-//  AppDelegate.swift
-//  taipeifun
-//
 //  Created by 江培瑋 on 2018/1/2.
 //  Copyright © 2018年 江培瑋. All rights reserved.
 //
