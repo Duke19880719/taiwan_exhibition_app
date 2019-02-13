@@ -20,6 +20,18 @@
 		074ED84A207FA49C004CE8A6 /* custom_search_sale_web_ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 074ED849207FA49C004CE8A6 /* custom_search_sale_web_ViewController.swift */; };
 		074ED84C207FA4FE004CE8A6 /* custom_search_schedule_map_ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 074ED84B207FA4FE004CE8A6 /* custom_search_schedule_map_ViewController.swift */; };
 		074ED84E207FB799004CE8A6 /* custom_search_exibit_info_TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 074ED84D207FB799004CE8A6 /* custom_search_exibit_info_TableViewCell.swift */; };
+		0760B19222056F060049E74C /* jetlink-boldpeakpop.TTF in Resources */ = {isa = PBXBuildFile; fileRef = 0760B18E22056F050049E74C /* jetlink-boldpeakpop.TTF */; };
+		0760B19322056F060049E74C /* jetlink-boldpeakpop.TTF in Resources */ = {isa = PBXBuildFile; fileRef = 0760B18E22056F050049E74C /* jetlink-boldpeakpop.TTF */; };
+		0760B19422056F060049E74C /* jetlink-boldpeakpop.TTF in Resources */ = {isa = PBXBuildFile; fileRef = 0760B18E22056F050049E74C /* jetlink-boldpeakpop.TTF */; };
+		0760B19522056F060049E74C /* jetlink-boldrightpop.TTF in Resources */ = {isa = PBXBuildFile; fileRef = 0760B18F22056F060049E74C /* jetlink-boldrightpop.TTF */; };
+		0760B19622056F060049E74C /* jetlink-boldrightpop.TTF in Resources */ = {isa = PBXBuildFile; fileRef = 0760B18F22056F060049E74C /* jetlink-boldrightpop.TTF */; };
+		0760B19722056F060049E74C /* jetlink-boldrightpop.TTF in Resources */ = {isa = PBXBuildFile; fileRef = 0760B18F22056F060049E74C /* jetlink-boldrightpop.TTF */; };
+		0760B19822056F060049E74C /* yafangmeigong14.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0760B19022056F060049E74C /* yafangmeigong14.ttf */; };
+		0760B19922056F060049E74C /* yafangmeigong14.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0760B19022056F060049E74C /* yafangmeigong14.ttf */; };
+		0760B19A22056F060049E74C /* yafangmeigong14.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0760B19022056F060049E74C /* yafangmeigong14.ttf */; };
+		0760B19B22056F060049E74C /* FZJianZhi-t.TTF in Resources */ = {isa = PBXBuildFile; fileRef = 0760B19122056F060049E74C /* FZJianZhi-t.TTF */; };
+		0760B19C22056F060049E74C /* FZJianZhi-t.TTF in Resources */ = {isa = PBXBuildFile; fileRef = 0760B19122056F060049E74C /* FZJianZhi-t.TTF */; };
+		0760B19D22056F060049E74C /* FZJianZhi-t.TTF in Resources */ = {isa = PBXBuildFile; fileRef = 0760B19122056F060049E74C /* FZJianZhi-t.TTF */; };
 		0762233A203DC66600541E01 /* display_info_ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07622339203DC66600541E01 /* display_info_ViewController.swift */; };
 		0770E1DB1FFB624A003BEC16 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0770E1DA1FFB624A003BEC16 /* AppDelegate.swift */; };
 		0770E1DD1FFB624A003BEC16 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0770E1DC1FFB624A003BEC16 /* ViewController.swift */; };
@@ -80,6 +92,10 @@
 		074ED849207FA49C004CE8A6 /* custom_search_sale_web_ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = custom_search_sale_web_ViewController.swift; sourceTree = "<group>"; };
 		074ED84B207FA4FE004CE8A6 /* custom_search_schedule_map_ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = custom_search_schedule_map_ViewController.swift; sourceTree = "<group>"; };
 		074ED84D207FB799004CE8A6 /* custom_search_exibit_info_TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = custom_search_exibit_info_TableViewCell.swift; sourceTree = "<group>"; };
+		0760B18E22056F050049E74C /* jetlink-boldpeakpop.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = "jetlink-boldpeakpop.TTF"; sourceTree = "<group>"; };
+		0760B18F22056F060049E74C /* jetlink-boldrightpop.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = "jetlink-boldrightpop.TTF"; sourceTree = "<group>"; };
+		0760B19022056F060049E74C /* yafangmeigong14.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = yafangmeigong14.ttf; sourceTree = "<group>"; };
+		0760B19122056F060049E74C /* FZJianZhi-t.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FZJianZhi-t.TTF"; sourceTree = "<group>"; };
 		07622339203DC66600541E01 /* display_info_ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = display_info_ViewController.swift; sourceTree = "<group>"; };
 		0770E1D71FFB624A003BEC16 /* 台灣藝文遊.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "台灣藝文遊.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0770E1DA1FFB624A003BEC16 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -268,6 +284,10 @@
 		079ACFA320A0416B00C7BF68 /* 字體 */ = {
 			isa = PBXGroup;
 			children = (
+				0760B19122056F060049E74C /* FZJianZhi-t.TTF */,
+				0760B18E22056F050049E74C /* jetlink-boldpeakpop.TTF */,
+				0760B18F22056F060049E74C /* jetlink-boldrightpop.TTF */,
+				0760B19022056F060049E74C /* yafangmeigong14.ttf */,
 				079ACFA220A0413E00C7BF68 /* keifont.ttf */,
 			);
 			path = "字體";
@@ -383,6 +403,10 @@
 			files = (
 				0770E1E81FFB624A003BEC16 /* LaunchScreen.storyboard in Resources */,
 				0770E1E51FFB624A003BEC16 /* Assets.xcassets in Resources */,
+				0760B19822056F060049E74C /* yafangmeigong14.ttf in Resources */,
+				0760B19522056F060049E74C /* jetlink-boldrightpop.TTF in Resources */,
+				0760B19B22056F060049E74C /* FZJianZhi-t.TTF in Resources */,
+				0760B19222056F060049E74C /* jetlink-boldpeakpop.TTF in Resources */,
 				0770E1E01FFB624A003BEC16 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -391,6 +415,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0760B19622056F060049E74C /* jetlink-boldrightpop.TTF in Resources */,
+				0760B19C22056F060049E74C /* FZJianZhi-t.TTF in Resources */,
+				0760B19322056F060049E74C /* jetlink-boldpeakpop.TTF in Resources */,
+				0760B19922056F060049E74C /* yafangmeigong14.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -398,6 +426,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0760B19722056F060049E74C /* jetlink-boldrightpop.TTF in Resources */,
+				0760B19D22056F060049E74C /* FZJianZhi-t.TTF in Resources */,
+				0760B19422056F060049E74C /* jetlink-boldpeakpop.TTF in Resources */,
+				0760B19A22056F060049E74C /* yafangmeigong14.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

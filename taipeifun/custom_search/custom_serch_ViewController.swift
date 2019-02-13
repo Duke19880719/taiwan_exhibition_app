@@ -20,6 +20,7 @@ class custom_serch_ViewController: UIViewController {
     @IBOutlet weak var enddate: UIButton!
     @IBOutlet weak var search_textfield_outlet: UITextField!
     @IBOutlet weak var segment: UISegmentedControl!
+    @IBOutlet weak var finish_search_but: UIButton!
     
     var url:String?
     var date_choise:Bool?
@@ -38,6 +39,7 @@ class custom_serch_ViewController: UIViewController {
     var select_area_str:String?
     var input_textfield_str:String?
     
+ 
     
     let formatter = DateFormatter()
     override func viewDidLoad() {
@@ -51,6 +53,8 @@ class custom_serch_ViewController: UIViewController {
         area_outlet.layer.cornerRadius = 10
         stardate_choise.layer.cornerRadius = 10
         enddate.layer.cornerRadius = 10
+        finish_search_but.layer.cornerRadius = 10
+        
         search_textfield_outlet.borderStyle = .roundedRect
         search_textfield_outlet.layer.borderWidth = 2
         search_textfield_outlet.layer.borderColor = UIColor.black.cgColor
@@ -329,7 +333,7 @@ extension custom_serch_ViewController:UITextFieldDelegate{
     }
     func textFieldDidEndEditing(_ textField: UITextField, reason: UITextFieldDidEndEditingReason) {
         if textField.text == ""{
-            textField.text = "輸入關鍵字查詢, 結果不包括其他搜尋條件"
+            textField.text = "輸入關鍵字查詢"
         }
     }
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

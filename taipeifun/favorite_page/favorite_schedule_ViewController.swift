@@ -26,12 +26,12 @@ class favorite_schedule_ViewController: UIViewController,get_touch {
     override func viewDidLoad() {
         super.viewDidLoad()
   
-        tableview.layer.masksToBounds = true
-        tableview.layer.borderColor = UIColor.orange.cgColor
-        tableview.layer.borderWidth = 4
-        tableview.layer.cornerRadius = 10
-        tableview.layer.shadowColor = UIColor.black.cgColor
-        tableview.layer.shadowOffset = CGSize(width: 2, height: 2)
+//        tableview.layer.masksToBounds = true
+//        tableview.layer.borderColor = UIColor.orange.cgColor
+//        tableview.layer.borderWidth = 4
+//        tableview.layer.cornerRadius = 10
+//        tableview.layer.shadowColor = UIColor.black.cgColor
+//        tableview.layer.shadowOffset = CGSize(width: 2, height: 2)
         
     }
     
@@ -138,13 +138,13 @@ extension favorite_schedule_ViewController:UITableViewDataSource,UITableViewDele
         cell.session.text = "活動場次\(indexPath.row+1)"
         
         if s[indexPath.row].end_time != "" {
-            cell.time_lab.text = "時間:\(s[indexPath.row].start_time!)－\(s[indexPath.row].end_time!)"
+            cell.time_lab.text = "\(s[indexPath.row].start_time!)－\(s[indexPath.row].end_time!)"
         }
    
         else{
-            cell.time_lab.text = "時間:\(s[indexPath.row].start_time!)"
+            cell.time_lab.text = "\(s[indexPath.row].start_time!)"
         }
-        cell.location_name_lab.text = "地點名稱：\(s[indexPath.row].location_name!)"
+        cell.location_name_lab.text = "\(s[indexPath.row].location_name!)"
         
         let yourAttributes : [NSAttributedStringKey: Any] = [
             NSAttributedStringKey.font : UIFont.systemFont(ofSize: 14),

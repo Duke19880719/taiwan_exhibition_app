@@ -38,13 +38,9 @@ class custom_search_exibit_info_ViewController: UIViewController {
     var check_viewdidappear:Bool = false
     var music_data:[display]?
 
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableview.layer.masksToBounds = true
-        tableview.layer.borderColor = UIColor.orange.cgColor
-        tableview.layer.borderWidth = 4
-        tableview.layer.cornerRadius = 10
+
 
         load_json(load_url: url!)
     }
@@ -80,11 +76,7 @@ class custom_search_exibit_info_ViewController: UIViewController {
 
 extension custom_search_exibit_info_ViewController{
     func load_json(load_url:String)  {
-      
-        //        alert_controller.view.backgroundColor = UIColor.orange
-      
-
-        
+    
         url1 = URL(string: load_url)
         let session = URLSession(configuration: URLSessionConfiguration.default,
                                  delegate: self ,
@@ -117,71 +109,40 @@ extension custom_search_exibit_info_ViewController:UITableViewDelegate,UITableVi
         
         let table_cell = tableView.dequeueReusableCell(withIdentifier: "custom_search_exibit_info_TableViewCell", for: indexPath) as! custom_search_exibit_info_TableViewCell
         
-//        if data1[indexPath.row].imageUrl != "" && data1[indexPath.row].imageUrl != nil {
-//            let url = URL(string: data1[indexPath.row].imageUrl!)
-//            var data2 = try? Data(contentsOf: url!)
-//            if data2 != nil{
-//                table_cell.echibit_img.image = UIImage(data: data2!)
-//            }
-//            else{
-//                table_cell.echibit_img.image = #imageLiteral(resourceName: "no_image_url")
-//            }
-//        }
-//        else{
-//            table_cell.echibit_img.image = #imageLiteral(resourceName: "no_image_url")
-//        }
-//        table_cell.exhibit_name.text = data1[indexPath.row].title
-//
-//        if data1[indexPath.row].showInfo!.count == 1{
-//            location_str = city_finf(location1: data1[indexPath.row].showInfo![0].location!)
-//        }
-//        else if  data1[indexPath.row].showInfo!.count>1{
-//            location_str = city_finf(location1: data1[indexPath.row].showInfo![0].location!) + ",其他地點"
-//        }
-//
-//        table_cell.time.text = "\((data1[indexPath.row].startDate)!)-\((data1[indexPath.row].endDate)!) "
-//
-//        if data1[indexPath.row].showInfo!.count > 0 ,data1[indexPath.row].showInfo![0].onSales != ""{
-//            sale_or_not(data1[indexPath.row].showInfo![0].onSales!)
-//        }
-//
-//        if temp_str == "" {
-//            temp_str = "無相關資訊"
-//        }
-//        if saleornot == "" ||  saleornot == nil{
-//            saleornot = "無相關資訊"
-//        }
-//
-//        table_cell.location_sale.text = "\(location_str)"
-//        if saleornot == "售票"{
-//            table_cell.saleornot_lab.textColor = UIColor.red
-//            table_cell.saleornot_lab.text = saleornot!
-//        }
-//        else if saleornot == "免費"{
-//            table_cell.saleornot_lab.textColor = UIColor.orange
-//            table_cell.saleornot_lab.text = saleornot!
-//        }
-//
-//        if data1.count > 0 {
-//              data_count_but.title = "\(data1.count)筆"
-//        }
-//
-//
-//        table_cell.index_display.text = String(indexPath.row + 1)
-       
         return table_cell
     }
 
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         var location_str:String = ""
-        
         let table_cell = cell as! custom_search_exibit_info_TableViewCell
+        //設置圖片圓形
+        table_cell.echibit_img.clipsToBounds = true
+        
+        table_cell.echibit_img.layer.cornerRadius = 10
+        
+        //cell animate
+        let cell_transform = CATransform3DTranslate(CATransform3DIdentity, 1000, 0, 1000)
+        
+        table_cell.layer.transform = cell_transform
+        
+        UIView.animate(withDuration: 0.75) {
+            table_cell.layer.transform = CATransform3DIdentity
+        }
+        //cell ui design
+        table_cell.layer.backgroundColor = UIColor.white.cgColor
+        table_cell.alpha = 0.65
+        
+        table_cell.layer.cornerRadius = 10
+        table_cell.clipsToBounds = true
+        
         
         if data1[indexPath.row].imageUrl != "" && data1[indexPath.row].imageUrl != nil {
             let url = URL(string: data1[indexPath.row].imageUrl!)
             var data2 = try? Data(contentsOf: url!)
             if data2 != nil{
+                var temp_img:UIImage = resizeImage(originalImg: UIImage(data: data2!)!)
+                
                 table_cell.echibit_img.image = UIImage(data: data2!)
             }
             else{
@@ -437,7 +398,7 @@ extension custom_search_exibit_info_ViewController:URLSessionDownloadDelegate{
                 var select_endday = select_endday_str?.toDateTime()
 
                 //search
-                if input_textfield_str != "輸入關鍵字查詢,結果不包括其他搜尋條件" && input_textfield_str != "" && input_textfield_str != nil{
+                if input_textfield_str != "輸入關鍵字查詢" && input_textfield_str != "" && input_textfield_str != nil{
                     print("\(input_textfield_str)\n1")
                     if (Results[i].title?.hasPrefix(input_textfield_str))!{
                         self.data1.append(Results[i])
@@ -450,24 +411,56 @@ extension custom_search_exibit_info_ViewController:URLSessionDownloadDelegate{
                     }
                 }
                 //100 入 日 地
-                else if select_endday == nil && select_statday == nil && select_area_str == nil{
+                if select_endday == nil && select_statday == nil && select_area_str == nil{
 
                         switch select_saleornot_str{
                         case "收費"?:
                             if (Results[i].showInfo?.count)! > 0 {
-                                if Results[i].showInfo![0].onSales == "Y"{
+                                if input_textfield_str != "輸入關鍵字查詢" && input_textfield_str != "" && input_textfield_str != nil && Results[i].showInfo![0].onSales == "Y"{
+                                    if (Results[i].title?.hasPrefix(input_textfield_str))!{
+                                        self.data1.append(Results[i])
+                                    }
+                                    else if (Results[i].title?.hasSuffix(input_textfield_str))!{
+                                        self.data1.append(Results[i])
+                                    }
+                                    else{
+                                        print("error")
+                                    }
+                                }
+                                else if Results[i].showInfo![0].onSales == "Y"{
                                     self.data1.append(Results[i])
                                 }
                             }
 
                         case "免費"?:
                             if (Results[i].showInfo?.count)! > 0 {
-                                if Results[i].showInfo![0].onSales == "N"{
+                                if input_textfield_str != "輸入關鍵字查詢" && input_textfield_str != "" && input_textfield_str != nil && Results[i].showInfo![0].onSales == "N"{
+                                    if (Results[i].title?.hasPrefix(input_textfield_str))!{
+                                        self.data1.append(Results[i])
+                                    }
+                                    else if (Results[i].title?.hasSuffix(input_textfield_str))!{
+                                        self.data1.append(Results[i])
+                                    }
+                                    else{
+                                        print("error")
+                                    }
+                                }
+                                else if Results[i].showInfo![0].onSales == "N"{
                                     self.data1.append(Results[i])
                                 }
                             }
                         case "兩者皆有"?:
-                            self.data1.append(Results[i])
+                            if input_textfield_str != "輸入關鍵字查詢" && input_textfield_str != "" && input_textfield_str != nil{
+                                if (Results[i].title?.hasPrefix(input_textfield_str))!{
+                                    self.data1.append(Results[i])
+                                }
+                                else if (Results[i].title?.hasSuffix(input_textfield_str))!{
+                                    self.data1.append(Results[i])
+                                }
+                            }
+                            else{
+                                self.data1.append(Results[i])
+                            }
                         default:
                             print("error")
                         }
@@ -484,15 +477,57 @@ extension custom_search_exibit_info_ViewController:URLSessionDownloadDelegate{
                                 if (Results[i].showInfo![index].location?.hasPrefix("臺北市"))! || (Results[i].showInfo![index].location?.hasPrefix("台北市"))! {
                                     switch select_saleornot_str{
                                     case "收費"?:
-                                        if Results[i].showInfo![0].onSales == "Y"{
-                                            self.data1.append(Results[i])
+//                                        if Results[i].showInfo![0].onSales == "Y"{
+//                                            self.data1.append(Results[i])
+//                                        }
+                                        if (Results[i].showInfo?.count)! > 0 {
+                                            if input_textfield_str != "輸入關鍵字查詢" && input_textfield_str != "" && input_textfield_str != nil && Results[i].showInfo![0].onSales == "Y"{
+                                                if (Results[i].title?.hasPrefix(input_textfield_str))!{
+                                                    self.data1.append(Results[i])
+                                                }
+                                                else if (Results[i].title?.hasSuffix(input_textfield_str))!{
+                                                    self.data1.append(Results[i])
+                                                }
+                                                else{
+                                                    print("error")
+                                                }
+                                            }
+                                            else if Results[i].showInfo![0].onSales == "Y"{
+                                                self.data1.append(Results[i])
+                                            }
                                         }
                                     case "免費"?:
-                                        if Results[i].showInfo![0].onSales == "N"{
-                                            self.data1.append(Results[i])
+//                                        if Results[i].showInfo![0].onSales == "N"{
+//                                            self.data1.append(Results[i])
+//                                        }
+                                        if (Results[i].showInfo?.count)! > 0 {
+                                            if input_textfield_str != "輸入關鍵字查詢" && input_textfield_str != "" && input_textfield_str != nil && Results[i].showInfo![0].onSales == "N"{
+                                                if (Results[i].title?.hasPrefix(input_textfield_str))!{
+                                                    self.data1.append(Results[i])
+                                                }
+                                                else if (Results[i].title?.hasSuffix(input_textfield_str))!{
+                                                    self.data1.append(Results[i])
+                                                }
+                                                else{
+                                                    print("error")
+                                                }
+                                            }
+                                            else if Results[i].showInfo![0].onSales == "N"{
+                                                self.data1.append(Results[i])
+                                            }
                                         }
                                     case "兩者皆有"?:
-                                        self.data1.append(Results[i])
+                                        if input_textfield_str != "輸入關鍵字查詢" && input_textfield_str != "" && input_textfield_str != nil{
+                                            if (Results[i].title?.hasPrefix(input_textfield_str))!{
+                                                self.data1.append(Results[i])
+                                            }
+                                            else if (Results[i].title?.hasSuffix(input_textfield_str))!{
+                                                self.data1.append(Results[i])
+                                            }
+                                        }
+                                        else{
+                                            self.data1.append(Results[i])
+                                        }
                                     default:
                                         print("error")
                                     }
@@ -503,15 +538,51 @@ extension custom_search_exibit_info_ViewController:URLSessionDownloadDelegate{
                                 if (Results[i].showInfo![index].location?.hasPrefix("臺中市"))! || (Results[i].showInfo![index].location?.hasPrefix("台中市"))! {
                                     switch select_saleornot_str{
                                     case "收費"?:
-                                        if Results[i].showInfo![0].onSales == "Y"{
-                                            self.data1.append(Results[i])
+                                        if (Results[i].showInfo?.count)! > 0 {
+                                            if input_textfield_str != "輸入關鍵字查詢" && input_textfield_str != "" && input_textfield_str != nil && Results[i].showInfo![0].onSales == "Y"{
+                                                if (Results[i].title?.hasPrefix(input_textfield_str))!{
+                                                    self.data1.append(Results[i])
+                                                }
+                                                else if (Results[i].title?.hasSuffix(input_textfield_str))!{
+                                                    self.data1.append(Results[i])
+                                                }
+                                                else{
+                                                    print("error")
+                                                }
+                                            }
+                                            else if Results[i].showInfo![0].onSales == "Y"{
+                                                self.data1.append(Results[i])
+                                            }
                                         }
                                     case "免費"?:
-                                        if Results[i].showInfo![0].onSales == "N"{
-                                            self.data1.append(Results[i])
+                                        if (Results[i].showInfo?.count)! > 0 {
+                                            if input_textfield_str != "輸入關鍵字查詢" && input_textfield_str != "" && input_textfield_str != nil && Results[i].showInfo![0].onSales == "N"{
+                                                if (Results[i].title?.hasPrefix(input_textfield_str))!{
+                                                    self.data1.append(Results[i])
+                                                }
+                                                else if (Results[i].title?.hasSuffix(input_textfield_str))!{
+                                                    self.data1.append(Results[i])
+                                                }
+                                                else{
+                                                    print("error")
+                                                }
+                                            }
+                                            else if Results[i].showInfo![0].onSales == "N"{
+                                                self.data1.append(Results[i])
+                                            }
                                         }
                                     case "兩者皆有"?:
-                                        self.data1.append(Results[i])
+                                        if input_textfield_str != "輸入關鍵字查詢" && input_textfield_str != "" && input_textfield_str != nil{
+                                            if (Results[i].title?.hasPrefix(input_textfield_str))!{
+                                                self.data1.append(Results[i])
+                                            }
+                                            else if (Results[i].title?.hasSuffix(input_textfield_str))!{
+                                                self.data1.append(Results[i])
+                                            }
+                                        }
+                                        else{
+                                            self.data1.append(Results[i])
+                                        }
                                     default:
                                         print("error")
                                     }
@@ -522,15 +593,51 @@ extension custom_search_exibit_info_ViewController:URLSessionDownloadDelegate{
                                 if (Results[i].showInfo![index].location?.hasPrefix("臺南市"))! || (Results[i].showInfo![index].location?.hasPrefix("台南市"))! {
                                     switch select_saleornot_str{
                                     case "收費"?:
-                                        if Results[i].showInfo![0].onSales == "Y"{
-                                            self.data1.append(Results[i])
+                                        if (Results[i].showInfo?.count)! > 0 {
+                                            if input_textfield_str != "輸入關鍵字查詢" && input_textfield_str != "" && input_textfield_str != nil && Results[i].showInfo![0].onSales == "Y"{
+                                                if (Results[i].title?.hasPrefix(input_textfield_str))!{
+                                                    self.data1.append(Results[i])
+                                                }
+                                                else if (Results[i].title?.hasSuffix(input_textfield_str))!{
+                                                    self.data1.append(Results[i])
+                                                }
+                                                else{
+                                                    print("error")
+                                                }
+                                            }
+                                            else if Results[i].showInfo![0].onSales == "Y"{
+                                                self.data1.append(Results[i])
+                                            }
                                         }
                                     case "免費"?:
-                                        if Results[i].showInfo![0].onSales == "N"{
-                                            self.data1.append(Results[i])
+                                        if (Results[i].showInfo?.count)! > 0 {
+                                            if input_textfield_str != "輸入關鍵字查詢" && input_textfield_str != "" && input_textfield_str != nil && Results[i].showInfo![0].onSales == "N"{
+                                                if (Results[i].title?.hasPrefix(input_textfield_str))!{
+                                                    self.data1.append(Results[i])
+                                                }
+                                                else if (Results[i].title?.hasSuffix(input_textfield_str))!{
+                                                    self.data1.append(Results[i])
+                                                }
+                                                else{
+                                                    print("error")
+                                                }
+                                            }
+                                            else if Results[i].showInfo![0].onSales == "N"{
+                                                self.data1.append(Results[i])
+                                            }
                                         }
                                     case "兩者皆有"?:
-                                        self.data1.append(Results[i])
+                                        if input_textfield_str != "輸入關鍵字查詢" && input_textfield_str != "" && input_textfield_str != nil{
+                                            if (Results[i].title?.hasPrefix(input_textfield_str))!{
+                                                self.data1.append(Results[i])
+                                            }
+                                            else if (Results[i].title?.hasSuffix(input_textfield_str))!{
+                                                self.data1.append(Results[i])
+                                            }
+                                        }
+                                        else{
+                                            self.data1.append(Results[i])
+                                        }
                                     default:
                                         print("error")
                                     }
@@ -541,15 +648,51 @@ extension custom_search_exibit_info_ViewController:URLSessionDownloadDelegate{
                                 if (Results[i].showInfo![index].location?.hasPrefix("臺東縣"))! || (Results[i].showInfo![index].location?.hasPrefix("台東縣"))! {
                                     switch select_saleornot_str{
                                     case "收費"?:
-                                        if Results[i].showInfo![0].onSales == "Y"{
-                                            self.data1.append(Results[i])
+                                        if (Results[i].showInfo?.count)! > 0 {
+                                            if input_textfield_str != "輸入關鍵字查詢" && input_textfield_str != "" && input_textfield_str != nil && Results[i].showInfo![0].onSales == "Y"{
+                                                if (Results[i].title?.hasPrefix(input_textfield_str))!{
+                                                    self.data1.append(Results[i])
+                                                }
+                                                else if (Results[i].title?.hasSuffix(input_textfield_str))!{
+                                                    self.data1.append(Results[i])
+                                                }
+                                                else{
+                                                    print("error")
+                                                }
+                                            }
+                                            else if Results[i].showInfo![0].onSales == "Y"{
+                                                self.data1.append(Results[i])
+                                            }
                                         }
                                     case "免費"?:
-                                        if Results[i].showInfo![0].onSales == "N"{
-                                            self.data1.append(Results[i])
+                                        if (Results[i].showInfo?.count)! > 0 {
+                                            if input_textfield_str != "輸入關鍵字查詢" && input_textfield_str != "" && input_textfield_str != nil && Results[i].showInfo![0].onSales == "N"{
+                                                if (Results[i].title?.hasPrefix(input_textfield_str))!{
+                                                    self.data1.append(Results[i])
+                                                }
+                                                else if (Results[i].title?.hasSuffix(input_textfield_str))!{
+                                                    self.data1.append(Results[i])
+                                                }
+                                                else{
+                                                    print("error")
+                                                }
+                                            }
+                                            else if Results[i].showInfo![0].onSales == "N"{
+                                                self.data1.append(Results[i])
+                                            }
                                         }
                                     case "兩者皆有"?:
-                                        self.data1.append(Results[i])
+                                        if input_textfield_str != "輸入關鍵字查詢" && input_textfield_str != "" && input_textfield_str != nil{
+                                            if (Results[i].title?.hasPrefix(input_textfield_str))!{
+                                                self.data1.append(Results[i])
+                                            }
+                                            else if (Results[i].title?.hasSuffix(input_textfield_str))!{
+                                                self.data1.append(Results[i])
+                                            }
+                                        }
+                                        else{
+                                            self.data1.append(Results[i])
+                                        }
                                     default:
                                         print("error")
                                     }
@@ -560,15 +703,51 @@ extension custom_search_exibit_info_ViewController:URLSessionDownloadDelegate{
                                 if (Results[i].showInfo![index].location?.hasPrefix(select_area_str!))! || (Results[i].showInfo![index].location?.hasPrefix(select_area_str!))!{
                                     switch select_saleornot_str{
                                     case "收費"?:
-                                        if Results[i].showInfo![0].onSales == "Y"{
-                                            self.data1.append(Results[i])
+                                        if (Results[i].showInfo?.count)! > 0 {
+                                            if input_textfield_str != "輸入關鍵字查詢" && input_textfield_str != "" && input_textfield_str != nil && Results[i].showInfo![0].onSales == "Y"{
+                                                if (Results[i].title?.hasPrefix(input_textfield_str))!{
+                                                    self.data1.append(Results[i])
+                                                }
+                                                else if (Results[i].title?.hasSuffix(input_textfield_str))!{
+                                                    self.data1.append(Results[i])
+                                                }
+                                                else{
+                                                    print("error")
+                                                }
+                                            }
+                                            else if Results[i].showInfo![0].onSales == "Y"{
+                                                self.data1.append(Results[i])
+                                            }
                                         }
                                     case "免費"?:
-                                        if Results[i].showInfo![0].onSales == "N"{
-                                            self.data1.append(Results[i])
+                                        if (Results[i].showInfo?.count)! > 0 {
+                                            if input_textfield_str != "輸入關鍵字查詢" && input_textfield_str != "" && input_textfield_str != nil && Results[i].showInfo![0].onSales == "N"{
+                                                if (Results[i].title?.hasPrefix(input_textfield_str))!{
+                                                    self.data1.append(Results[i])
+                                                }
+                                                else if (Results[i].title?.hasSuffix(input_textfield_str))!{
+                                                    self.data1.append(Results[i])
+                                                }
+                                                else{
+                                                    print("error")
+                                                }
+                                            }
+                                            else if Results[i].showInfo![0].onSales == "N"{
+                                                self.data1.append(Results[i])
+                                            }
                                         }
                                     case "兩者皆有"?:
-                                        self.data1.append(Results[i])
+                                        if input_textfield_str != "輸入關鍵字查詢" && input_textfield_str != "" && input_textfield_str != nil{
+                                            if (Results[i].title?.hasPrefix(input_textfield_str))!{
+                                                self.data1.append(Results[i])
+                                            }
+                                            else if (Results[i].title?.hasSuffix(input_textfield_str))!{
+                                                self.data1.append(Results[i])
+                                            }
+                                        }
+                                        else{
+                                            self.data1.append(Results[i])
+                                        }
                                     default:
                                         print("error")
                                     }
@@ -585,15 +764,51 @@ extension custom_search_exibit_info_ViewController:URLSessionDownloadDelegate{
 
                         switch select_saleornot_str{
                         case "收費"?:
-                            if Results[i].showInfo![0].onSales == "Y"{
-                                self.data1.append(Results[i])
+                            if (Results[i].showInfo?.count)! > 0 {
+                                if input_textfield_str != "輸入關鍵字查詢" && input_textfield_str != "" && input_textfield_str != nil && Results[i].showInfo![0].onSales == "Y"{
+                                    if (Results[i].title?.hasPrefix(input_textfield_str))!{
+                                        self.data1.append(Results[i])
+                                    }
+                                    else if (Results[i].title?.hasSuffix(input_textfield_str))!{
+                                        self.data1.append(Results[i])
+                                    }
+                                    else{
+                                        print("error")
+                                    }
+                                }
+                                else if Results[i].showInfo![0].onSales == "Y"{
+                                    self.data1.append(Results[i])
+                                }
                             }
                         case "免費"?:
-                            if Results[i].showInfo![0].onSales == "N"{
-                                self.data1.append(Results[i])
+                            if (Results[i].showInfo?.count)! > 0 {
+                                if input_textfield_str != "輸入關鍵字查詢" && input_textfield_str != "" && input_textfield_str != nil && Results[i].showInfo![0].onSales == "N"{
+                                    if (Results[i].title?.hasPrefix(input_textfield_str))!{
+                                        self.data1.append(Results[i])
+                                    }
+                                    else if (Results[i].title?.hasSuffix(input_textfield_str))!{
+                                        self.data1.append(Results[i])
+                                    }
+                                    else{
+                                        print("error")
+                                    }
+                                }
+                                else if Results[i].showInfo![0].onSales == "N"{
+                                    self.data1.append(Results[i])
+                                }
                             }
                         case "兩者皆有"?:
-                            self.data1.append(Results[i])
+                            if input_textfield_str != "輸入關鍵字查詢" && input_textfield_str != "" && input_textfield_str != nil{
+                                if (Results[i].title?.hasPrefix(input_textfield_str))!{
+                                    self.data1.append(Results[i])
+                                }
+                                else if (Results[i].title?.hasSuffix(input_textfield_str))!{
+                                    self.data1.append(Results[i])
+                                }
+                            }
+                            else{
+                                self.data1.append(Results[i])
+                            }
                         default:
                              print("error")
                         }
@@ -610,15 +825,51 @@ extension custom_search_exibit_info_ViewController:URLSessionDownloadDelegate{
                                     if (Results[i].showInfo![index].location?.hasPrefix("臺北市"))! || (Results[i].showInfo![index].location?.hasPrefix("台北市"))! {
                                         switch select_saleornot_str{
                                         case "收費"?:
-                                            if Results[i].showInfo![0].onSales == "Y"{
-                                                self.data1.append(Results[i])
+                                            if (Results[i].showInfo?.count)! > 0 {
+                                                if input_textfield_str != "輸入關鍵字查詢" && input_textfield_str != "" && input_textfield_str != nil && Results[i].showInfo![0].onSales == "Y"{
+                                                    if (Results[i].title?.hasPrefix(input_textfield_str))!{
+                                                        self.data1.append(Results[i])
+                                                    }
+                                                    else if (Results[i].title?.hasSuffix(input_textfield_str))!{
+                                                        self.data1.append(Results[i])
+                                                    }
+                                                    else{
+                                                        print("error")
+                                                    }
+                                                }
+                                                else if Results[i].showInfo![0].onSales == "Y"{
+                                                    self.data1.append(Results[i])
+                                                }
                                             }
                                         case "免費"?:
-                                            if Results[i].showInfo![0].onSales == "N"{
-                                                self.data1.append(Results[i])
+                                            if (Results[i].showInfo?.count)! > 0 {
+                                                if input_textfield_str != "輸入關鍵字查詢" && input_textfield_str != "" && input_textfield_str != nil && Results[i].showInfo![0].onSales == "N"{
+                                                    if (Results[i].title?.hasPrefix(input_textfield_str))!{
+                                                        self.data1.append(Results[i])
+                                                    }
+                                                    else if (Results[i].title?.hasSuffix(input_textfield_str))!{
+                                                        self.data1.append(Results[i])
+                                                    }
+                                                    else{
+                                                        print("error")
+                                                    }
+                                                }
+                                                else if Results[i].showInfo![0].onSales == "N"{
+                                                    self.data1.append(Results[i])
+                                                }
                                             }
                                         case "兩者皆有"?:
-                                            self.data1.append(Results[i])
+                                            if input_textfield_str != "輸入關鍵字查詢" && input_textfield_str != "" && input_textfield_str != nil{
+                                                if (Results[i].title?.hasPrefix(input_textfield_str))!{
+                                                    self.data1.append(Results[i])
+                                                }
+                                                else if (Results[i].title?.hasSuffix(input_textfield_str))!{
+                                                    self.data1.append(Results[i])
+                                                }
+                                            }
+                                            else{
+                                                self.data1.append(Results[i])
+                                            }
                                         default:
                                              print("error")
                                         }
@@ -629,17 +880,51 @@ extension custom_search_exibit_info_ViewController:URLSessionDownloadDelegate{
                                     if (Results[i].showInfo![index].location?.hasPrefix("臺中市"))! || (Results[i].showInfo![index].location?.hasPrefix("台中市"))! {
                                         switch select_saleornot_str{
                                         case "收費"?:
-                                        
-                                            if Results[i].showInfo![0].onSales == "Y"{
-                                                self.data1.append(Results[i])
+                                            if (Results[i].showInfo?.count)! > 0 {
+                                                if input_textfield_str != "輸入關鍵字查詢" && input_textfield_str != "" && input_textfield_str != nil && Results[i].showInfo![0].onSales == "Y"{
+                                                    if (Results[i].title?.hasPrefix(input_textfield_str))!{
+                                                        self.data1.append(Results[i])
+                                                    }
+                                                    else if (Results[i].title?.hasSuffix(input_textfield_str))!{
+                                                        self.data1.append(Results[i])
+                                                    }
+                                                    else{
+                                                        print("error")
+                                                    }
+                                                }
+                                                else if Results[i].showInfo![0].onSales == "Y"{
+                                                    self.data1.append(Results[i])
+                                                }
                                             }
                                         case "免費"?:
-                                    
-                                            if Results[i].showInfo![0].onSales == "N"{
-                                                self.data1.append(Results[i])
+                                            if (Results[i].showInfo?.count)! > 0 {
+                                                if input_textfield_str != "輸入關鍵字查詢" && input_textfield_str != "" && input_textfield_str != nil && Results[i].showInfo![0].onSales == "N"{
+                                                    if (Results[i].title?.hasPrefix(input_textfield_str))!{
+                                                        self.data1.append(Results[i])
+                                                    }
+                                                    else if (Results[i].title?.hasSuffix(input_textfield_str))!{
+                                                        self.data1.append(Results[i])
+                                                    }
+                                                    else{
+                                                        print("error")
+                                                    }
+                                                }
+                                                else if Results[i].showInfo![0].onSales == "N"{
+                                                    self.data1.append(Results[i])
+                                                }
                                             }
                                         case "兩者皆有"?:
-                                            self.data1.append(Results[i])
+                                            if input_textfield_str != "輸入關鍵字查詢" && input_textfield_str != "" && input_textfield_str != nil{
+                                                if (Results[i].title?.hasPrefix(input_textfield_str))!{
+                                                    self.data1.append(Results[i])
+                                                }
+                                                else if (Results[i].title?.hasSuffix(input_textfield_str))!{
+                                                    self.data1.append(Results[i])
+                                                }
+                                            }
+                                            else{
+                                                self.data1.append(Results[i])
+                                            }
                                         default:
                                              print("error")
                                         }
@@ -650,15 +935,51 @@ extension custom_search_exibit_info_ViewController:URLSessionDownloadDelegate{
                                     if (Results[i].showInfo![index].location?.hasPrefix("臺南市"))! || (Results[i].showInfo![index].location?.hasPrefix("台南市"))! {
                                         switch select_saleornot_str{
                                         case "收費"?:
-                                            if Results[i].showInfo![0].onSales == "Y"{
-                                                self.data1.append(Results[i])
+                                            if (Results[i].showInfo?.count)! > 0 {
+                                                if input_textfield_str != "輸入關鍵字查詢" && input_textfield_str != "" && input_textfield_str != nil && Results[i].showInfo![0].onSales == "Y"{
+                                                    if (Results[i].title?.hasPrefix(input_textfield_str))!{
+                                                        self.data1.append(Results[i])
+                                                    }
+                                                    else if (Results[i].title?.hasSuffix(input_textfield_str))!{
+                                                        self.data1.append(Results[i])
+                                                    }
+                                                    else{
+                                                        print("error")
+                                                    }
+                                                }
+                                                else if Results[i].showInfo![0].onSales == "Y"{
+                                                    self.data1.append(Results[i])
+                                                }
                                             }
                                         case "免費"?:
-                                            if Results[i].showInfo![0].onSales == "N"{
-                                                self.data1.append(Results[i])
+                                            if (Results[i].showInfo?.count)! > 0 {
+                                                if input_textfield_str != "輸入關鍵字查詢" && input_textfield_str != "" && input_textfield_str != nil && Results[i].showInfo![0].onSales == "N"{
+                                                    if (Results[i].title?.hasPrefix(input_textfield_str))!{
+                                                        self.data1.append(Results[i])
+                                                    }
+                                                    else if (Results[i].title?.hasSuffix(input_textfield_str))!{
+                                                        self.data1.append(Results[i])
+                                                    }
+                                                    else{
+                                                        print("error")
+                                                    }
+                                                }
+                                                else if Results[i].showInfo![0].onSales == "Y"{
+                                                    self.data1.append(Results[i])
+                                                }
                                             }
                                         case "兩者皆有"?:
-                                            self.data1.append(Results[i])
+                                            if input_textfield_str != "輸入關鍵字查詢" && input_textfield_str != "" && input_textfield_str != nil{
+                                                if (Results[i].title?.hasPrefix(input_textfield_str))!{
+                                                    self.data1.append(Results[i])
+                                                }
+                                                else if (Results[i].title?.hasSuffix(input_textfield_str))!{
+                                                    self.data1.append(Results[i])
+                                                }
+                                            }
+                                            else{
+                                                self.data1.append(Results[i])
+                                            }
                                         default:
                                              print("error")
                                         }
@@ -669,15 +990,51 @@ extension custom_search_exibit_info_ViewController:URLSessionDownloadDelegate{
                                     if (Results[i].showInfo![index].location?.hasPrefix("臺東縣"))! || (Results[i].showInfo![index].location?.hasPrefix("台東縣"))! {
                                         switch select_saleornot_str{
                                         case "收費"?:
-                                            if Results[i].showInfo![0].onSales == "Y"{
-                                                self.data1.append(Results[i])
+                                            if (Results[i].showInfo?.count)! > 0 {
+                                                if input_textfield_str != "輸入關鍵字查詢" && input_textfield_str != "" && input_textfield_str != nil && Results[i].showInfo![0].onSales == "Y"{
+                                                    if (Results[i].title?.hasPrefix(input_textfield_str))!{
+                                                        self.data1.append(Results[i])
+                                                    }
+                                                    else if (Results[i].title?.hasSuffix(input_textfield_str))!{
+                                                        self.data1.append(Results[i])
+                                                    }
+                                                    else{
+                                                        print("error")
+                                                    }
+                                                }
+                                                else if Results[i].showInfo![0].onSales == "Y"{
+                                                    self.data1.append(Results[i])
+                                                }
                                             }
                                         case "免費"?:
-                                            if Results[i].showInfo![0].onSales == "N"{
-                                                self.data1.append(Results[i])
+                                            if (Results[i].showInfo?.count)! > 0 {
+                                                if input_textfield_str != "輸入關鍵字查詢" && input_textfield_str != "" && input_textfield_str != nil && Results[i].showInfo![0].onSales == "N"{
+                                                    if (Results[i].title?.hasPrefix(input_textfield_str))!{
+                                                        self.data1.append(Results[i])
+                                                    }
+                                                    else if (Results[i].title?.hasSuffix(input_textfield_str))!{
+                                                        self.data1.append(Results[i])
+                                                    }
+                                                    else{
+                                                        print("error")
+                                                    }
+                                                }
+                                                else if Results[i].showInfo![0].onSales == "Y"{
+                                                    self.data1.append(Results[i])
+                                                }
                                             }
                                         case "兩者皆有"?:
-                                            self.data1.append(Results[i])
+                                            if input_textfield_str != "輸入關鍵字查詢" && input_textfield_str != "" && input_textfield_str != nil{
+                                                if (Results[i].title?.hasPrefix(input_textfield_str))!{
+                                                    self.data1.append(Results[i])
+                                                }
+                                                else if (Results[i].title?.hasSuffix(input_textfield_str))!{
+                                                    self.data1.append(Results[i])
+                                                }
+                                            }
+                                            else{
+                                                self.data1.append(Results[i])
+                                            }
                                         default:
                                             print("error")
                                         }
@@ -688,15 +1045,51 @@ extension custom_search_exibit_info_ViewController:URLSessionDownloadDelegate{
                                         if (Results[i].showInfo![index].location?.hasPrefix(select_area_str!))! || (Results[i].showInfo![index].location?.hasPrefix(select_area_str!))! {
                                             switch select_saleornot_str{
                                             case "收費"?:
-                                                if Results[i].showInfo![0].onSales == "Y"{
-                                                    self.data1.append(Results[i])
+                                                if (Results[i].showInfo?.count)! > 0 {
+                                                    if input_textfield_str != "輸入關鍵字查詢" && input_textfield_str != "" && input_textfield_str != nil && Results[i].showInfo![0].onSales == "Y"{
+                                                        if (Results[i].title?.hasPrefix(input_textfield_str))!{
+                                                            self.data1.append(Results[i])
+                                                        }
+                                                        else if (Results[i].title?.hasSuffix(input_textfield_str))!{
+                                                            self.data1.append(Results[i])
+                                                        }
+                                                        else{
+                                                            print("error")
+                                                        }
+                                                    }
+                                                    else if Results[i].showInfo![0].onSales == "Y"{
+                                                        self.data1.append(Results[i])
+                                                    }
                                                 }
                                             case "免費"?:
-                                                if Results[i].showInfo![0].onSales == "N"{
-                                                    self.data1.append(Results[i])
+                                                if (Results[i].showInfo?.count)! > 0 {
+                                                    if input_textfield_str != "輸入關鍵字查詢" && input_textfield_str != "" && input_textfield_str != nil && Results[i].showInfo![0].onSales == "N"{
+                                                        if (Results[i].title?.hasPrefix(input_textfield_str))!{
+                                                            self.data1.append(Results[i])
+                                                        }
+                                                        else if (Results[i].title?.hasSuffix(input_textfield_str))!{
+                                                            self.data1.append(Results[i])
+                                                        }
+                                                        else{
+                                                            print("error")
+                                                        }
+                                                    }
+                                                    else if Results[i].showInfo![0].onSales == "Y"{
+                                                        self.data1.append(Results[i])
+                                                    }
                                                 }
                                             case "兩者皆有"?:
-                                                self.data1.append(Results[i])
+                                                if input_textfield_str != "輸入關鍵字查詢" && input_textfield_str != "" && input_textfield_str != nil{
+                                                    if (Results[i].title?.hasPrefix(input_textfield_str))!{
+                                                        self.data1.append(Results[i])
+                                                    }
+                                                    else if (Results[i].title?.hasSuffix(input_textfield_str))!{
+                                                        self.data1.append(Results[i])
+                                                    }
+                                                }
+                                                else{
+                                                    self.data1.append(Results[i])
+                                                }
                                             default:
                                                 print("error")
                                             }
@@ -720,6 +1113,7 @@ extension custom_search_exibit_info_ViewController:URLSessionDownloadDelegate{
             if self.check_viewdidappear  && self.check_alert == true {
                 self.dismiss(animated: true, completion: nil)
             }
+            
 
         }
     

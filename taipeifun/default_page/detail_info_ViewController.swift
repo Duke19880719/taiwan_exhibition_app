@@ -23,13 +23,6 @@ class detail_info_ViewController: UIViewController,get_touch{
     override func viewDidLoad() {
         super.viewDidLoad()
      
-        tableview.layer.masksToBounds = true
-        tableview.layer.borderColor = UIColor.orange.cgColor
-        tableview.layer.borderWidth = 4
-        tableview.layer.cornerRadius = 10
-        tableview.layer.shadowColor = UIColor.black.cgColor
-        tableview.layer.shadowOffset = CGSize(width: 2, height: 2)
-
     }
   
     override func didReceiveMemoryWarning() {
@@ -75,45 +68,36 @@ extension detail_info_ViewController:UITableViewDataSource,UITableViewDelegate{
         let cell = tableView.dequeueReusableCell(withIdentifier: "detail_cell", for: indexPath) as! detail_info_TableViewCell
         
 
-        
-//        cell.location_but.titleLabel?.lineBreakMode = .byWordWrapping
-//        cell.session.text = "活動場次\(indexPath.row+1)"
-//        if rececive_data![indexPath.row].endTime != ""{
-//            cell.time_lab.text = "時間:\(rececive_data![indexPath.row].time!)－\(rececive_data![indexPath.row].endTime!)"
-//        }
-//        else{
-//             cell.time_lab.text = "時間:\(rececive_data![indexPath.row].time!)"
-//        }
-//        cell.location_name_lab.text = "地點名稱：\(rececive_data![indexPath.row].locationName!)"
-//
-//        let yourAttributes : [NSAttributedStringKey: Any] = [
-//            NSAttributedStringKey.font : UIFont.systemFont(ofSize: 14),
-//            NSAttributedStringKey.foregroundColor : UIColor.blue,
-//            NSAttributedStringKey.underlineStyle : NSUnderlineStyle.styleSingle.rawValue]
-//        var atribute_str = NSMutableAttributedString(string: "\(String(describing: rececive_data![indexPath.row].location!))",
-//            attributes:  yourAttributes)
-//        if rececive_data![indexPath.row].location != "" && rececive_data![indexPath.row].location != nil{
-//            cell.location_but.setAttributedTitle(atribute_str, for: .normal)
-//        }
-//        else{
-//            cell.location_but.setTitle("無相關資訊", for: .normal)
-//        }
-//        cell.return_touch_index(index_temp: indexPath.row)
-//        cell.protocol_passtouch = self
         return cell
     }
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let cell = cell as! detail_info_TableViewCell
         
+        //cell animate
+        let cell_transform = CATransform3DTranslate(CATransform3DIdentity, 1000, 0, 1000)
+        
+        cell.layer.transform = cell_transform
+        
+        UIView.animate(withDuration: 0.75) {
+            cell.layer.transform = CATransform3DIdentity
+        }
+        //cell ui design
+        cell.layer.backgroundColor = UIColor.white.cgColor
+        cell.alpha = 0.85
+        
+        cell.layer.cornerRadius = 10
+        cell.clipsToBounds = true
+        
+        
         cell.location_but.titleLabel?.lineBreakMode = .byWordWrapping
         cell.session.text = "活動場次\(indexPath.row+1)"
         if rececive_data![indexPath.row].endTime != ""{
-            cell.time_lab.text = "時間:\(rececive_data![indexPath.row].time!)－\(rececive_data![indexPath.row].endTime!)"
+            cell.time_lab.text = "\(rececive_data![indexPath.row].time!)－\(rececive_data![indexPath.row].endTime!)"
         }
         else{
-            cell.time_lab.text = "時間:\(rececive_data![indexPath.row].time!)"
+            cell.time_lab.text = "\(rececive_data![indexPath.row].time!)"
         }
-        cell.location_name_lab.text = "地點名稱：\(rececive_data![indexPath.row].locationName!)"
+        cell.location_name_lab.text = "\(rececive_data![indexPath.row].locationName!)"
         
         let yourAttributes : [NSAttributedStringKey: Any] = [
             NSAttributedStringKey.font : UIFont.systemFont(ofSize: 14),

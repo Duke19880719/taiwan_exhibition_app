@@ -35,10 +35,10 @@ class favorite_ViewController: UIViewController {
                 print("error")
             }
         }
-        tableview_outlet.layer.masksToBounds = true
-        tableview_outlet.layer.borderColor = UIColor.orange.cgColor
-        tableview_outlet.layer.borderWidth = 4
-        tableview_outlet.layer.cornerRadius = 10
+//        tableview_outlet.layer.masksToBounds = true
+//        tableview_outlet.layer.borderColor = UIColor.orange.cgColor
+//        tableview_outlet.layer.borderWidth = 4
+//        tableview_outlet.layer.cornerRadius = 10
 
 
     }
@@ -109,6 +109,28 @@ extension favorite_ViewController:UITableViewDelegate,UITableViewDataSource{
     }
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         var cell =  cell as! favorite_TableViewCell
+       
+        //設置圖片圓形
+        cell.echibit_img.clipsToBounds = true
+        
+        cell.echibit_img.layer.cornerRadius = 10
+        
+        //cell animate
+        let cell_transform = CATransform3DTranslate(CATransform3DIdentity, 1000, 0, 1000)
+        
+        cell.layer.transform = cell_transform
+        
+        UIView.animate(withDuration: 0.75) {
+            cell.layer.transform = CATransform3DIdentity
+        }
+        //cell ui design
+        cell.layer.backgroundColor = UIColor.white.cgColor
+        cell.alpha = 0.65
+        
+        cell.layer.cornerRadius = 10
+        cell.clipsToBounds = true
+        
+        
         cell.echibit_img.image = UIImage(data: exibition![indexPath.row].img_exhib!)
         
         cell.exhibit_name.text = exibition![indexPath.row].title_temp!

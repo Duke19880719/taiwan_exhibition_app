@@ -33,18 +33,20 @@ class ViewController: UIViewController {
    
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableview.layer.masksToBounds = true
-        tableview.layer.borderColor = UIColor.orange.cgColor
-        tableview.layer.borderWidth = 4
-        
-        tableview.layer.cornerRadius = 10
+//        tableview.layer.masksToBounds = true
+//        tableview.layer.borderColor = UIColor.orange.cgColor
+//        tableview.layer.borderWidth = 4
+//        
+//        tableview.layer.cornerRadius = 10
         
 //        tableview.layer.shadowColor = UIColor.black.cgColor
 //        tableview.layer.shadowOffset = CGSize(width: 2, height: 2)
 //        tableview.layer.shadowRadius = 3
 //        tableview.layer.shadowOpacity = 0.5
         display_info.text = "請點選上方圖示顯示資訊"
-        
+      var header_view = UIView()
+      header_view.frame = CGRect(x: 0, y: 0, width: self.tableview.bounds.width, height: 1) 
+      self.tableview.tableHeaderView = header_view
     }
 
     override func didReceiveMemoryWarning() {
@@ -77,7 +79,6 @@ extension ViewController:change{             //protocol change method coding
         alert_activity.autoresizingMask = [.flexibleWidth,.flexibleHeight]
         alert_activity.color = UIColor.blue
         alert_activity.startAnimating()
-//        alert_controller.view.backgroundColor = UIColor.orange
 
         alert_controller.view.addSubview(alert_activity)
 
@@ -121,6 +122,7 @@ extension ViewController:change{             //protocol change method coding
                 self.data1 = exhibit_struct
                 OperationQueue.main.addOperation {
                     self.tableview.reloadData()
+                    self.tableview.selectRow(at: IndexPath.init(row: 0, section: 0), animated: true, scrollPosition: .top)
                 }
             }
           
@@ -147,6 +149,7 @@ extension ViewController:change{             //protocol change method coding
                 self.data1 = drama_struct
                 OperationQueue.main.addOperation {
                     self.tableview.reloadData()
+                    self.tableview.selectRow(at: IndexPath.init(row: 0, section: 0), animated: true, scrollPosition: .top)
                 }
             }
         case "音樂資訊":
@@ -174,6 +177,7 @@ extension ViewController:change{             //protocol change method coding
                 self.data1 = music_struct
                 OperationQueue.main.addOperation {
                     self.tableview.reloadData()
+                    self.tableview.selectRow(at: IndexPath.init(row: 0, section: 0), animated: true, scrollPosition: .top)
                 }
             }
           
@@ -201,6 +205,7 @@ extension ViewController:change{             //protocol change method coding
                 self.data1 = dance_struct
                 OperationQueue.main.addOperation {
                     self.tableview.reloadData()
+                    self.tableview.selectRow(at: IndexPath.init(row: 0, section: 0), animated: true, scrollPosition: .top)
                 }
             }
         
@@ -227,6 +232,7 @@ extension ViewController:change{             //protocol change method coding
                 self.data1 = independ_music_struct
                 OperationQueue.main.addOperation {
                     self.tableview.reloadData()
+                    self.tableview.selectRow(at: IndexPath.init(row: 0, section: 0), animated: true, scrollPosition: .top)
                 }
             }
         
@@ -254,6 +260,7 @@ extension ViewController:change{             //protocol change method coding
                 self.data1 = movie_struct
                 OperationQueue.main.addOperation {
                     self.tableview.reloadData()
+                    self.tableview.selectRow(at: IndexPath.init(row: 0, section: 0), animated: true, scrollPosition: .top)
                 }
             }
        
@@ -280,6 +287,7 @@ extension ViewController:change{             //protocol change method coding
                 self.data1 = elseArt_struct
                 OperationQueue.main.addOperation {
                     self.tableview.reloadData()
+                    self.tableview.selectRow(at: IndexPath.init(row: 0, section: 0), animated: true, scrollPosition: .top)
                 }
             }
         default:
@@ -306,11 +314,18 @@ extension ViewController:change{             //protocol change method coding
 extension ViewController:UITableViewDelegate,UITableViewDataSource{
  
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+       
+        if data1 != nil{
+            return 1
+        }
+        return 0
     }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+
         if data1 != nil{
             return (data1?.count)!
+            
         }
         return 0
     }
@@ -318,19 +333,50 @@ extension ViewController:UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let table_cell = tableView.dequeueReusableCell(withIdentifier: "exhibit_TableViewCell", for: indexPath) as! exhibit_TableViewCell
-        
+
         return table_cell
     }
+//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+//        return nil
+//    }
+//    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+//        return nil
+//    }
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         var location_str:String = ""
         
         let table_cell = cell as! exhibit_TableViewCell
         
+        
+        //設置圖片圓形
+        table_cell.echibit_img.clipsToBounds = true
+        
+        table_cell.echibit_img.layer.cornerRadius = 10
+        
+        //cell animate
+        let cell_transform = CATransform3DTranslate(CATransform3DIdentity, 1000, 0, 1000)
+        
+        table_cell.layer.transform = cell_transform
+        
+        UIView.animate(withDuration: 0.75) {
+             table_cell.layer.transform = CATransform3DIdentity
+        }
+        //cell ui design
+        table_cell.layer.backgroundColor = UIColor.white.cgColor
+        table_cell.alpha = 0.65
+        
+        table_cell.layer.cornerRadius = 10
+        table_cell.clipsToBounds = true
+        
+        
+        //
         if data1![indexPath.row].imageUrl != "" && data1![indexPath.row].imageUrl != nil {
             let url = URL(string: data1![indexPath.row].imageUrl!)
             var data2 = try? Data(contentsOf: url!)
             if data2 != nil{
-                table_cell.echibit_img.image = UIImage(data: data2!)
+                var temp_img:UIImage = resizeImage(originalImg: UIImage(data: data2!)!)
+                
+                table_cell.echibit_img.image = temp_img
             }
             else{
                 table_cell.echibit_img.image = #imageLiteral(resourceName: "no_image_url")
@@ -370,7 +416,7 @@ extension ViewController:UITableViewDelegate,UITableViewDataSource{
             table_cell.saleornot_lab.textColor = UIColor.orange
             table_cell.saleornot_lab.text = saleornot!
         }
-        data_count.text = "\(data1![0].total!)筆"
+        data_count.text = "\(data1!.count)筆"
         
         table_cell.index_display.text = String(indexPath.row + 1)
         
@@ -583,8 +629,74 @@ extension ViewController:URLSessionDownloadDelegate{
         }
         OperationQueue.main.addOperation {
             self.tableview.reloadData()
+            self.tableview.selectRow(at: IndexPath.init(row: 0, section: 0), animated: true, scrollPosition: .top)
+            
         }
     }
 
 }
 
+//圖片尺寸轉換規則
+//a，圖片寬或者高均小於或等於1280時圖片尺寸保持不變，不改變圖片大小
+//b,寬或者高大於1280，但是圖片寬度高度比小於或等於2，則將圖片寬或者高取值大的等比壓縮至1280
+//c，寬或者高均大於1280，但是圖片寬高比大於2，則寬或者高取值小的等比壓縮至1280
+//**d, **寬或者高，只有一個值大於1280 ，並且寬高比超過2，不改變圖片大小
+
+
+public func resizeImage(originalImg:UIImage) -> UIImage{
+    
+    //prepare constants
+    let width = originalImg.size.width
+    let height = originalImg.size.height
+    let scale = width/height
+    
+    var sizeChange = CGSize()
+    
+    if width <= 1280 && height <= 1280{ //a，图片宽或者高均小于或等于1280时图片尺寸保持不变，不改变图片大小
+        return originalImg
+    }else if width > 1280 || height > 1280 {//b,宽或者高大于1280，但是图片宽度高度比小于或等于2，则将图片宽或者高取大的等比压缩至1280
+        
+        if scale <= 2 && scale >= 1 {
+            let changedWidth:CGFloat = 1280/32
+            let changedheight:CGFloat = changedWidth / scale
+            sizeChange = CGSize(width: changedWidth, height: changedheight)
+            
+        }else if scale >= 0.5 && scale <= 1 {
+            
+            let changedheight:CGFloat = 1280/32
+            let changedWidth:CGFloat = changedheight * scale
+            sizeChange = CGSize(width: changedWidth, height: changedheight)
+            
+        }else if width > 1280 && height > 1280 {//宽以及高均大于1280，但是图片宽高比大于2时，则宽或者高取小的等比压缩至1280
+            
+            if scale > 2 {//高的值比较小
+                
+                let changedheight:CGFloat = 1280/32
+                let changedWidth:CGFloat = changedheight * scale
+                sizeChange = CGSize(width: changedWidth, height: changedheight)
+                
+            }else if scale < 0.5{//宽的值比较小
+                
+                let changedWidth:CGFloat = 1280/32
+                let changedheight:CGFloat = changedWidth / scale
+                sizeChange = CGSize(width: changedWidth, height: changedheight)
+                
+            }
+        }else {//d, 宽或者高，只有一个大于1280，并且宽高比超过2，不改变图片大小
+            return originalImg
+        }
+    }
+    
+    UIGraphicsBeginImageContext(sizeChange)
+    
+    //draw resized image on Context
+    originalImg.draw(in: CGRect(x:0,y: 0,width:sizeChange.width,  height:sizeChange.height))
+    
+    //create UIImage
+    let resizedImg = UIGraphicsGetImageFromCurrentImageContext()
+    
+    UIGraphicsEndImageContext()
+    
+    return resizedImg!
+    
+}

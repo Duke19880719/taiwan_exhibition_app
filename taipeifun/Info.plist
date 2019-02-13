@@ -35,6 +35,14 @@
 	<string>搜尋附近展覽資訊,需要您的所在地座標</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>搜尋附近展覽資訊,需要您的所在地座標</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>FZJianZhi-t.TTF</string>
+		<string>jetlink-boldrightpop.TTF</string>
+		<string>jetlink-boldpeakpop.TTF</string>
+		<string>yafangmeigong14.ttf</string>
+		<string>keifont.ttf</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

@@ -17,9 +17,9 @@ struct display:Codable{
     let descriptionFilterHtml : String?
     let imageUrl : String?
     let masterUnit : [String]?
- // let subUnit : [String]?
- // let supportUnit : [String]?
-//  let otherUnit : [String]?
+  let subUnit : [String]?
+  let supportUnit : [String]?
+  let otherUnit : [String]?
     let webSales : String?
     let sourceWebPromote : String?
   //  let comment : String?
